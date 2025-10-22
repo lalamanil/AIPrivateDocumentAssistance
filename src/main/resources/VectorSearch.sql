@@ -2,7 +2,8 @@ SELECT base.doc_id,
 ARRAY_AGG(distance order by distance ASC )   as distances ,
 ARRAY_AGG(base.text order by distance ASC)  as text,
 count(base.doc_id) as numberOfChucks,
-ARRAY_AGG( distinct base.created_at)[offset(0)] as created_at
+ARRAY_AGG( distinct base.created_at)[offset(0)] as created_at,
+ARRAY_AGG(base.content_type)[offset(0)]  as contenttype
 from 
 VECTOR_SEARCH( (select * from `videoanalyzer-455321.text_embeddings_dataset.chunks`
 where created_at in (select ARRAY_AGG( created_at 

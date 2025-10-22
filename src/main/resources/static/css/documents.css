@@ -1,0 +1,212 @@
+@charset "UTF-8";
+
+* {
+	box-sizing: border-box;
+}
+
+/* 🛑 MUST be here to force all flex-parents to calculate height correctly */
+html, body, #content-area, .main-content {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+/* Ensure the fragment wrapper itself is a full-height column */
+.documents-container>div[th\:fragment="content"] {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+/* ====================================
+   CONTAINER LAYOUT
+   ==================================== */
+.documents-container {
+	display: flex;
+	height: calc(100vh - 120px); /* adjusts to your header area height */
+	padding: 20px;
+	gap: 20px;
+	background: #fafafa;
+	overflow: hidden;
+}
+
+/* ====================================
+   LEFT PANEL - DOCUMENT LIST
+   ==================================== */
+.documents-list {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	background: #fff;
+	border-radius: 8px;
+	border: 1px solid #ddd;
+	overflow: hidden;
+	min-height: 0; /* ensures internal flex child scrolls properly */
+}
+
+.documents-list h3 {
+	margin: 0;
+	padding: 10px 15px;
+	text-align: center;
+	background: #f7f7f7;
+	border-bottom: 1px solid #eee;
+	flex-shrink: 0;
+}
+
+#doc-items {
+	flex: 1; /* fills vertical space between header & pagination */
+	overflow-y: auto; /* scrollable list */
+	list-style: none;
+	margin: 0;
+	padding: 10px 15px;
+	min-height: 0;
+}
+
+/* LIST ITEM STYLING (Removed margin-bottom, using padding for spacing) */
+.documents-list li {
+	display: flex;
+	align-items: center;
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	border-radius: 8px;
+	/* Spacing is handled primarily by margin-bottom now */
+	padding: 10px 12px;
+	/* 🛑 Reverting to a simple margin-bottom for spacing between items */
+	margin-bottom: 8px;
+	margin-top: 0;
+	cursor: pointer;
+	transition: background 0.3s, transform 0.1s;
+}
+
+.documents-list li:last-child {
+	/* Ensure the last item sits right against the bottom */
+	margin-bottom: 0;
+}
+
+.documents-list li:hover {
+	background: #eef5ff;
+	transform: scale(1.01);
+}
+
+.file-icon {
+	margin-right: 10px;
+	font-size: 18px;
+	color: #4a90e2;
+}
+
+.file-name {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	color: #333;
+	font-size: 14px;
+}
+
+/* Tooltip on hover for long filenames */
+.file-name[title] {
+	position: relative;
+}
+
+.file-name[title]:hover::after {
+	content: attr(title);
+	position: absolute;
+	background: #333;
+	color: #fff;
+	padding: 5px 8px;
+	border-radius: 4px;
+	font-size: 12px;
+	top: 120%;
+	left: 0;
+	white-space: nowrap;
+	z-index: 10;
+	opacity: 0.9;
+}
+
+/* RIGHT PANEL */
+.document-viewer {
+	flex: 1;
+	background: #fff;
+	border-radius: 8px;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column; /* allows stacking if needed */
+	justify-content: flex-start; /* 🧩 content at top */
+	align-items: center;
+}
+
+#doc-preview {
+	flex: 1;
+	width: 100%;
+	height: 100%;
+	display: flex;
+}
+
+/* Default Placeholder */
+#preview-placeholder {
+	text-align: center;
+	color: #aaa;
+	font-style: italic;
+	font-size: 15px;
+}
+
+/* File Preview Styles */
+#doc-preview iframe, #doc-preview img {
+	width: 100%;
+	height: 100%;
+	border: none;
+	border-radius: 8px;
+	object-fit: contain;
+	background: #fdfdfd;
+}
+
+/* Active State Styles (already using the ID, so they are highly specific) */
+.documents-list #doc-items li.active {
+	background-color: #eef5ff;
+	color: #4CAF50;
+	border-left: 4px solid #4CAF50;
+	cursor: default;
+	padding-left: 16px;
+	transform: none;
+}
+
+.documents-list #doc-items li.active:hover {
+	background-color: #eef5ff;
+	transform: none;
+}
+
+.pagination-controls {
+	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+	background: #fafafa;
+	border-top: 1px solid #eee;
+}
+
+/* Optional styling for pagination buttons */
+.pagination-controls button {
+	background: #4a90e2;
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	padding: 6px 12px;
+	font-size: 13px;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.pagination-controls button:disabled {
+	background: #ccc;
+	cursor: not-allowed;
+}
+
+.pagination-controls button:hover:not(:disabled) {
+	background: #3578e5;
+}
+
+#pageInfo {
+	font-size: 13px;
+	color: #555;
+}

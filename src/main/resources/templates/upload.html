@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Upload Fragment</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="upload-container">
+        <div class="upload-box" id="upload-box">
+            <div class="upload-icon">&#8679;</div>
+            <button type="button" id="browse-btn">Browse</button>
+            <input type="file" id="file-input" multiple hidden>
+            <p>drop a file here</p>
+            <span class="file-note">*File supported .pdf,.png,.jpeg,.jpg,.bmp,.gif,.tiff</span>
+        </div>
+
+        <div class="uploaded-files">
+            <h3>Uploaded files</h3>
+            <ul id="file-list"></ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>

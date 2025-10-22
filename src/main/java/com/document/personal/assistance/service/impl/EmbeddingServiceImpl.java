@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 import com.document.personal.assistance.constants.ApplicationConstants;
 import com.document.personal.assistance.exception.PrivateDocumentException;
+import com.document.personal.assistance.model.UserDocument;
 import com.document.personal.assistance.model.VectorSearchResultsModel;
 import com.document.personal.assistance.service.EmbeddingService;
 import com.document.personal.assistance.utility.BigQueryUtility;
@@ -64,6 +65,7 @@ public class EmbeddingServiceImpl implements EmbeddingService {
 									row.put("chunk_id", "chunck" + chunkCount);
 									row.put("text", chunkList.get(i));
 									row.put("userid", userid);
+									row.put("content_type", contentType);
 									float[] floatvectors = vectorList.get(i);
 									List<Double> emblist = new ArrayList<Double>();
 									for (float f : floatvectors) {
@@ -146,7 +148,7 @@ public class EmbeddingServiceImpl implements EmbeddingService {
 	}
 
 	@Override
-	public List<String> getListofDocumentsForUser(String userid) {
+	public List<UserDocument> getListofDocumentsForUser(String userid) {
 		// TODO Auto-generated method stub
 		return StorageUtility.getDocumentsOnUserid(userid);
 	}

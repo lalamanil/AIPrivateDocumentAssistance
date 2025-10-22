@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>User Documents</title>
+</head>
+<body>
+	<div th:fragment="content">
+		<div class="documents-container">
+			<!-- Left panel -->
+			<div class="documents-list">
+				<h3>Your Documents</h3>
+				<ul id="doc-items"></ul>
+				<div class="pagination-controls">
+					<button id="prevPage" disabled="disabled">Previous</button>
+					<span id="pageInfo">Page 1</span>
+					<button id="nextPage" disabled>Next</button>
+				</div>
+			</div>
+			<!-- Right panel -->
+			<div class="document-viewer">
+				<div id="preview-placeholder">
+					<p>Select a document to preview</p>
+				</div>
+				<div id="doc-preview"></div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>

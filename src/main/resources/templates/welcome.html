@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Private Document Assistant</title>
+<link rel="stylesheet" th:href="@{/css/welcome.css}">
+<link rel="stylesheet" th:href="@{/css/upload.css}">
+<link rel="stylesheet" th:href="@{/css/documents.css}">
+<link rel="stylesheet" th:href="@{/css/chat.css}">
+</head>
+<body>
+
+	<div class="container">
+
+		<!--  Left Sidebar -->
+		<div class="sidebar">
+			<h2>Menu</h2>
+			<ul>
+				<li><a href="#" onclick="loadContent('upload')">Upload
+						Documents</a></li>
+				<li><a href="#" onclick="loadContent('listsdocuments')">View
+						Documents</a></li>
+
+				<li><a href="#" onclick="loadContent('retreivedocuments')">Retrieve
+						Documents</a></li>
+			</ul>
+		</div>
+
+
+		<!--  Main content Area -->
+
+		<div class="main-content">
+
+			<!-- Top Right User Info -->
+
+			<div class="user-profile">
+
+				<img alt="profile"
+					th:src="${ picture != null} ? ${picture} : @{/images/avatar.png}"
+					width="80" height="80">
+
+				<div class="user-info">
+					<p class="username" th:text="${name.toUpperCase()}">User Name</p>
+					<p class="email" th:text="${email}">user@gmail.com</p>
+				</div>
+			</div>
+
+			<div class="welcome-section">
+				<h2>Welcome to Private Document Assistant</h2>
+
+			</div>
+
+			<!-- Dynamic Content Section -->
+			<div id="content-area"></div>
+		</div>
+	</div>
+
+
+	<!--  Java script to load HTML fragments dynamically -->
+
+	<script type="text/javascript">
+	
+
+	function loadContent(page) {
+	    const contentArea = document.getElementById("content-area");
+
+	    if (page === 'upload') {
+	        fetch('/uploadPage')
+	            .then(response => response.text())
+	            .then(html => {
+	                contentArea.innerHTML = html;
+	                // Initialize upload functionality
+	                initUpload();
+	            })
+	            .catch(error => console.error('ERROR:', error));
+	    } 
+	    else if (page === 'listsdocuments') {
+	        // TODO: Implement logic to list documents
+	        
+	    	fetch('/documentsPage')
+	        .then(response => response.text())
+	        .then(html => {
+	          contentArea.innerHTML = html;
+	          //logic to dynamically load the documents
+	         loadUserDocument();
+	        })
+	        .catch(error => console.error('ERROR:', error));
+	              
+	        
+	    } 
+	    else if (page === 'retreivedocuments') {  	
+	    	fetch('/chatPage')
+	    	.then(response => response.text())
+	    	.then(html => {
+	    		contentArea.innerHTML= html;
+	    		initChat();
+	    		
+             }).catch(error => console.error('ERROR:', error));
+
+	       
+	    }
+	}
+	
+</script>
+
+	<script th:src="@{/js/upload.js}"></script>
+	<script th:src="@{/js/loadUserDocuments.js}"></script>
+	<script th:src="@{/js/chat.js}"></script>
+
+</body>
+</html>

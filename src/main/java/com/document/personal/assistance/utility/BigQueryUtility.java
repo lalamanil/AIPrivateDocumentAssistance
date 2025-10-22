@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-
 import com.document.personal.assistance.constants.ApplicationConstants;
 import com.document.personal.assistance.exception.PrivateDocumentException;
 import com.document.personal.assistance.model.VectorSearchResultsModel;
@@ -153,6 +152,7 @@ public class BigQueryUtility {
 						}
 						vectorSearchResultsModel.setDistanceList(distanceList);
 						vectorSearchResultsModel.setNumberOfChunks(row.get("numberOfChucks").getLongValue());
+						vectorSearchResultsModel.setContentType(row.get("contenttype").getStringValue());
 						long micros = row.get("created_at").getTimestampValue();
 						Instant instant = Instant.ofEpochMilli(micros / 1000);
 						LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, ZoneId.of("UTC"));

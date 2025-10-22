@@ -3,7 +3,6 @@ package com.document.personal.assistance.model;
 import java.time.Instant;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @JsonPropertyOrder({ "status", "timestamp" })

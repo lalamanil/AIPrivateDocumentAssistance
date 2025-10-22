@@ -2,15 +2,18 @@ package com.document.personal.assistance.utility;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import com.document.personal.assistance.constants.ApplicationConstants;
 import com.document.personal.assistance.exception.PrivateDocumentException;
+import com.document.personal.assistance.model.UserDocument;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -62,6 +65,7 @@ public class StorageUtility {
 		} else {
 
 			System.out.println("storage object is null. Please check application logs.");
+			throw new PrivateDocumentException("storage object is null. Please check application logs", 500);
 		}
 	}
 
@@ -82,13 +86,14 @@ public class StorageUtility {
 			}
 		} else {
 			System.out.println("storage object is null. Please check application logs");
+			throw new PrivateDocumentException("storage object is null. Please check application logs", 500);
 		}
 		return contentMap;
 	}
 
-	public static List<String> getDocumentsOnUserid(String userid) {
+	public static List<UserDocument> getDocumentsOnUserid(String userid) {
 
-		List<String> documentList = new ArrayList<String>();
+		List<UserDocument> documentList = new ArrayList<UserDocument>();
 
 		if (NotNullEmptyUtility.notNullEmptyCheck(userid)) {
 
@@ -103,16 +108,20 @@ public class StorageUtility {
 					Iterable<Blob> iterable = bucket.list(BlobListOption.prefix(userid + "/")).iterateAll();
 					for (Blob blob : iterable) {
 						if (!blob.isDirectory()) {
-							String fullName = blob.getName();
-							documentList.add(fullName);
+							String name = blob.getName().substring(blob.getName().lastIndexOf("/") + 1);
+							documentList.add(new UserDocument(name, blob.getName(), blob.getContentType(),
+									generateSignedUrl(ApplicationConstants.BUCKET, blob.getName())));
 						}
 					}
+					return documentList;
 				} catch (StorageException e) {
 					// TODO: handle exception
 					e.printStackTrace();
+					throw new PrivateDocumentException("Storage Exception:" + e.getMessage(), 500);
 				}
 			} else {
 				System.out.println("storage object is null. Please check application logs");
+				throw new PrivateDocumentException("storage object is null. Please check application logs", 500);
 			}
 
 		} else {
@@ -120,8 +129,27 @@ public class StorageUtility {
 			throw new PrivateDocumentException("userid is required. Can not be null or empty", 400);
 		}
 
-		return documentList;
+	}
 
+	public static String generateSignedUrl(String bucketName, String objectName) {
+		if (null == storage) {
+			LOGGER.info("storage object is null. Please check application logs");
+			throw new PrivateDocumentException("storage object is null. Please check application logs", 500);
+		}
+		if (!NotNullEmptyUtility.notNullEmptyCheck(bucketName)) {
+			LOGGER.info("bucket Name cannot be null or empty");
+			throw new PrivateDocumentException("bucketName cannot be null or empty", 400);
+		}
+		if (!NotNullEmptyUtility.notNullEmptyCheck(objectName)) {
+			LOGGER.info("objectName cannot be null or empty");
+			throw new PrivateDocumentException("objectName cannot be null or empty", 400);
+		}
+
+		BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, objectName).build();
+		URL url = storage.signUrl(blobInfo, 1, TimeUnit.HOURS, Storage.SignUrlOption.withV4Signature());
+		String signedUrl = url.toString();
+		LOGGER.info("signedUrl for bucketName:" + bucketName + " objectName:" + objectName + " is:" + signedUrl);
+		return signedUrl;
 	}
 
 	public static void main_(String[] args) {

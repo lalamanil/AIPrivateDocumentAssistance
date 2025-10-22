@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({ "documentId", "distanceList", "numberOfChunks", "createdAt" })
+@JsonPropertyOrder({ "documentId", "distanceList", "numberOfChunks", "signedUrl", "contentType", "createdAt" })
 public class VectorSearchResultsModel {
 
 	@JsonProperty("documentId")
@@ -24,9 +24,25 @@ public class VectorSearchResultsModel {
 	@Schema(description = "Number of document chunks returned that are closest to the given user prompt.", example = "10")
 	private long numberOfChunks;
 
+	@JsonProperty("signedUrl")
+	@Schema(description = "Signed URL to access the object securely via browser.")
+	private String signedUrl;
+
+	@JsonProperty("contentType")
+	@Schema(description = "Content Type of the document stores in GCS bucket.", example = "application/pdf")
+	private String contentType;
+
 	@JsonProperty("createdAt")
 	@Schema(description = "ISO-8601 formatted timestamp indicating when the search results were generated.", example = "2025-10-02T00:23:48.186776Z")
 	private String createdAt;
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
 
 	public String getDocumentId() {
 		return documentId;
@@ -34,6 +50,14 @@ public class VectorSearchResultsModel {
 
 	public void setDocumentId(String documentId) {
 		this.documentId = documentId;
+	}
+
+	public String getSignedUrl() {
+		return signedUrl;
+	}
+
+	public void setSignedUrl(String signedUrl) {
+		this.signedUrl = signedUrl;
 	}
 
 	public List<Double> getDistanceList() {

@@ -87,17 +87,17 @@ public class TextEmbeddingWithPredictionServiceUtility {
 						ApplicationConstants.TEXT_EMBEDDING_MODEL);
 				System.out.println("endPointName is:" + endPointName);
 
-				int exactChuckSize = chunkList.size() / 100;
-				int leftOverChunk = chunkList.size() % 100;
+				int exactChuckSize = chunkList.size() / ApplicationConstants.NUMBER_OF_CHUNKS_PER_REQUEST;
+				int leftOverChunk = chunkList.size() % ApplicationConstants.NUMBER_OF_CHUNKS_PER_REQUEST;
 				int track = 0;
 				if (exactChuckSize > 0) {
 					for (int i = 0; i < exactChuckSize; i++) {
-
 						// predictRequest
 						PredictRequest.Builder request = PredictRequest.newBuilder().setEndpoint(endPointName);
-						List<String> subsetChunkList = chunkList.subList(track, track + 100);
+						List<String> subsetChunkList = chunkList.subList(track,
+								track + ApplicationConstants.NUMBER_OF_CHUNKS_PER_REQUEST);
 						predictionRequestCall(subsetChunkList, request, embeddings, track, taskType);
-						track = track + 100;
+						track = track + ApplicationConstants.NUMBER_OF_CHUNKS_PER_REQUEST;
 						System.out.println("***** at track:" + track);
 					}
 				}

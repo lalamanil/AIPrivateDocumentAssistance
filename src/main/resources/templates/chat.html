@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<div th:fragment="content">
+
+		<div class="chat-container">
+
+			<!-- left panel Retrieved Documents -->
+
+			<div class="chat-documents-list">
+				<h3>Matched Documents</h3>
+				<ul id="chat-doc-list"></ul>
+
+				<div class="chat-pagination-controls">
+					<button id="chatprevPage" disabled="disabled">Previous</button>
+					<span id="chatpageInfo">Page 1</span>
+					<button id="chatnextPage" disabled="disabled">Next</button>
+				</div>
+
+			</div>
+
+			<!-- Right panel: Chat + Preview -->
+
+			<!-- Chat Section -->
+			<div class="chat-box">
+				<div id="chat-messages" class="chat-messages"></div>
+				<div class="chat-input-area">
+					<input type="text" id="user-query"
+						placeholder="Ask about your documents...." />
+					<button id="send-query">Send</button>
+				</div>
+			</div>
+
+			<!-- Document Preview Section -->
+
+			<div class="chat-doc-preview" id="chat-doc-preview">
+				<p>select a document to preview here.</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

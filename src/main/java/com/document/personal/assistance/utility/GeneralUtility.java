@@ -1,10 +1,10 @@
 package com.document.personal.assistance.utility;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Logger;
+import com.document.personal.assistance.constants.ApplicationConstants;
 import com.document.personal.assistance.model.VectorSearchResultsModel;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -48,6 +48,10 @@ public class GeneralUtility {
 				List<Double> distanceList = vsr.getDistanceList();
 				if (null != distanceList && !distanceList.isEmpty()) {
 					if (distanceList.get(0) < relevanceCutOff) {
+						// adding the signed url
+						String signedUrl = StorageUtility.generateSignedUrl(ApplicationConstants.BUCKET,
+								vsr.getDocumentId());
+						vsr.setSignedUrl(signedUrl);
 						filteredList.add(vsr);
 					}
 				}
@@ -56,6 +60,5 @@ public class GeneralUtility {
 
 		return filteredList;
 	}
-
 
 }
