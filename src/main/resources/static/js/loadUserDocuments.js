@@ -81,11 +81,21 @@ function loadUserDocument() {
 		}
 	});
 
+	//Get spinner reference
+	const spinner = document.getElementById("doc-spinner");
+
+	//show spinner before API call
+	spinner.style.display = "flex";
+	listContainer.style.display = "none";
+
+
 
 	//Back end API call to pull documents from backend
 	fetch(`/listuserdocs?userid=${encodeURIComponent(userEmailId)}`)
 		.then(response => response.json())
 		.then(docs => {
+			spinner.style.display = "none"; //hide spinner
+			listContainer.style.display = "block"; //show list
 			documents = docs;
 			if (documents.lenght == 0) {
 				listContainer.innerHTML = "<li>No documents found.</li>";
@@ -94,6 +104,8 @@ function loadUserDocument() {
 			renderPage(currentPage);
 
 		}).catch(err => {
+			spinner.style.display = "none";
+			listContainer.style.display = "block";
 			console.error("Error loading documents:", err);
 			listContainer.innerHTML = "<li>Error loading documents</li>";
 		});

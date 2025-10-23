@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:fragment="content">
+		<div class="pdf-viewer-container">
+		<div class="pdf-frame-wrapper">
+			<iframe
+				th:src="@{/pdfs/AI-Powered Personal Document Assistance System.pdf}"
+				class="pdf-frame" scrolling="auto"> </iframe>
+		</div>
+		</div>
+	</div>
+
+</body>
+</html>

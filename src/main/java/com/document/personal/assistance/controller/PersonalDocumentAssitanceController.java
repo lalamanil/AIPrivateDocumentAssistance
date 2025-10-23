@@ -221,6 +221,17 @@ public class PersonalDocumentAssitanceController {
 		return "chat :: content";
 	}
 
+	@RequestMapping(value = "/technicaldocPage", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+	public String getTechnicalDocPage() {
+
+		return "technicaldoc :: content";
+	}
+
+	@RequestMapping(value = "/contactPage", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
+	public String getContactPage() {
+		return "contact :: content";
+	}
+
 	@Hidden
 	@RequestMapping("/favicon.ico")
 	@ResponseBody

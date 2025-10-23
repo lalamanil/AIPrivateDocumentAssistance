@@ -227,9 +227,6 @@ async function uploadFileWithResumableGCS(email, file, li) {
 							throw new Error(`Chunk upload failed: HTTP ${res.status}`);
 						}
 					}
-
-
-
 				} catch (err) {
 					alert(err);
 					attempts++;

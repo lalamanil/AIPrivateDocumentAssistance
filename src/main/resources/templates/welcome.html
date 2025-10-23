@@ -7,6 +7,8 @@
 <link rel="stylesheet" th:href="@{/css/upload.css}">
 <link rel="stylesheet" th:href="@{/css/documents.css}">
 <link rel="stylesheet" th:href="@{/css/chat.css}">
+<link rel="stylesheet" th:href="@{/css/technicaldoc.css}">
+<link rel="stylesheet" th:href="@{/css/contact.css}">
 </head>
 <body>
 
@@ -16,13 +18,20 @@
 		<div class="sidebar">
 			<h2>Menu</h2>
 			<ul>
-				<li><a href="#" onclick="loadContent('upload')">Upload
+				<li><a href="#" onclick="loadContent('upload',this)">Upload
 						Documents</a></li>
-				<li><a href="#" onclick="loadContent('listsdocuments')">View
+				<li><a href="#" onclick="loadContent('listsdocuments',this)">View
 						Documents</a></li>
 
-				<li><a href="#" onclick="loadContent('retreivedocuments')">Retrieve
+				<li><a href="#" onclick="loadContent('retreivedocuments',this)">Retrieve
 						Documents</a></li>
+
+				<li><a href="#" onclick="loadContent('technicaldoc',this)">System
+						Design Document</a></li>
+
+				<li><a href="#" onclick="loadContent('contact',this)">Contact
+						& Support</a></li>
+
 			</ul>
 		</div>
 
@@ -56,14 +65,30 @@
 	</div>
 
 
+
+	<div id="spinner-overlay">
+		<div class="spinner"></div>
+	</div>
+
 	<!--  Java script to load HTML fragments dynamically -->
 
 	<script type="text/javascript">
 	
+	
+	function showSpinner() {
+		  document.getElementById("spinner-overlay").style.visibility = "visible";
+		}
+	
+	function hideSpinner() {
+		  document.getElementById("spinner-overlay").style.visibility = "hidden";
+		}
+	
 
-	function loadContent(page) {
+	function loadContent(page,element) {
 	    const contentArea = document.getElementById("content-area");
 
+	    showSpinner(); //show spinner immediately
+	    setActiveLink(element);
 	    if (page === 'upload') {
 	        fetch('/uploadPage')
 	            .then(response => response.text())
@@ -72,7 +97,7 @@
 	                // Initialize upload functionality
 	                initUpload();
 	            })
-	            .catch(error => console.error('ERROR:', error));
+	            .catch(error => console.error('ERROR:', error)).finally(() => hideSpinner());
 	    } 
 	    else if (page === 'listsdocuments') {
 	        // TODO: Implement logic to list documents
@@ -84,7 +109,7 @@
 	          //logic to dynamically load the documents
 	         loadUserDocument();
 	        })
-	        .catch(error => console.error('ERROR:', error));
+	        .catch(error => console.error('ERROR:', error)).finally(() => hideSpinner());
 	              
 	        
 	    } 
@@ -95,11 +120,37 @@
 	    		contentArea.innerHTML= html;
 	    		initChat();
 	    		
-             }).catch(error => console.error('ERROR:', error));
+             }).catch(error => console.error('ERROR:', error)).finally(() => hideSpinner());
 
 	       
-	    }
+	    }else if(page === 'technicaldoc'){
+	    	 fetch('/technicaldocPage')
+	    	.then(response => response.text())
+            .then(html => {
+            	contentArea.innerHTML=html;	
+              }).catch(error => console.error('ERROR:',error)).finally(()=> hideSpinner()) ;	
+	    	
+	    	
+             }else if(page === 'contact'){
+
+            	 fetch('/contactPage')
+     	    	.then(response => response.text())
+                .then(html => {
+                 contentArea.innerHTML=html;	
+                   }).catch(error => console.error('ERROR:',error)).finally(()=> hideSpinner()) ;	
+            	 
+
+                 }
+	    
+	  
 	}
+	
+	
+	function setActiveLink(element)
+	{
+		document.querySelectorAll(".sidebar ul li a").forEach(a => a.classList.remove("active"));
+	    element.classList.add("active");	
+     }
 	
 </script>
 
