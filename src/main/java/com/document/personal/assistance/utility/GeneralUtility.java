@@ -1,5 +1,7 @@
 package com.document.personal.assistance.utility;
-
+/**
+@author ANIL LALAM
+**/
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -40,9 +42,7 @@ public class GeneralUtility {
 
 	public static List<VectorSearchResultsModel> filterVectorSearchBasedOnRelevenceCutoff(
 			List<VectorSearchResultsModel> source, float relevanceCutOff) {
-
 		List<VectorSearchResultsModel> filteredList = new ArrayList<VectorSearchResultsModel>();
-
 		if (null != source && !source.isEmpty()) {
 			source.forEach(vsr -> {
 				List<Double> distanceList = vsr.getDistanceList();
@@ -52,6 +52,17 @@ public class GeneralUtility {
 						String signedUrl = StorageUtility.generateSignedUrl(ApplicationConstants.BUCKET,
 								vsr.getDocumentId());
 						vsr.setSignedUrl(signedUrl);
+						String documentId = vsr.getDocumentId();
+						if (NotNullEmptyUtility.notNullEmptyCheck(documentId)) {
+							String[] useridObjectName = documentId.split("/");
+							if (null != useridObjectName && useridObjectName.length > 1) {
+								vsr.setSummaryText(FireStoreUtility.getSummaryForDocument(useridObjectName[0],
+										useridObjectName[1]));
+							}
+
+						}
+						vsr.setAudiosignedUrl(
+								StorageUtility.generateSignedUrl(ApplicationConstants.AUDIO_BUCKET, documentId));
 						filteredList.add(vsr);
 					}
 				}
@@ -59,6 +70,48 @@ public class GeneralUtility {
 		}
 
 		return filteredList;
+	}
+
+	public static List<VectorSearchResultsModel> filterVectorsFromGenerativeModelOnRelevenceCutoff(
+			List<VectorSearchResultsModel> source, float relevenceCutOff) {
+		List<VectorSearchResultsModel> filteredList = new ArrayList<VectorSearchResultsModel>();
+		if (null != source && !source.isEmpty()) {
+			source.forEach(vsr -> {
+				if (vsr.getRelevanceScore() >= relevenceCutOff) {
+					String signedUrl = StorageUtility.generateSignedUrl(ApplicationConstants.BUCKET,
+							vsr.getDocumentId());
+					vsr.setSignedUrl(signedUrl);
+					String documentId = vsr.getDocumentId();
+					if (NotNullEmptyUtility.notNullEmptyCheck(documentId)) {
+						String[] userIdObjectName = documentId.split("/");
+						if (null != userIdObjectName && userIdObjectName.length > 1) {
+							vsr.setSummaryText(
+									FireStoreUtility.getSummaryForDocument(userIdObjectName[0], userIdObjectName[1]));
+						}
+					}
+					vsr.setAudiosignedUrl(
+							StorageUtility.generateSignedUrl(ApplicationConstants.AUDIO_BUCKET, documentId));
+					filteredList.add(vsr);
+				}
+			});
+		}
+		return filteredList;
+	}
+
+	public static String convertBoldToHtmlOrPlainText(String text, boolean isHtml) {
+		String result = text;
+		boolean isOpening = true;
+		String regex = "\\*\\*";
+		while (result.contains("**")) {
+			if (isOpening) {
+				result = result.replaceFirst(regex, isHtml ? "<b>" : "");
+			} else {
+				result = result.replaceFirst(regex, isHtml ? "</b>" : "");
+			}
+			// Toggle the flag for next replacement
+			isOpening = !isOpening;
+		}
+		return result;
 	}
 
 }

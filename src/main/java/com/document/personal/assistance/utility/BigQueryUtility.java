@@ -1,5 +1,7 @@
 package com.document.personal.assistance.utility;
-
+/**
+@author ANIL LALAM
+**/
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -150,7 +152,18 @@ public class BigQueryUtility {
 								distanceList.add(fv.getDoubleValue());
 							});
 						}
+
+						List<String> chunkTextList = new ArrayList<String>();
+						List<FieldValue> chunkTextValues = row.get("text").getRepeatedValue();
+						if (null != chunkTextValues) {
+							chunkTextValues.forEach(chunkfv -> {
+								chunkTextList.add(chunkfv.getStringValue());
+							});
+
+						}
+
 						vectorSearchResultsModel.setDistanceList(distanceList);
+						vectorSearchResultsModel.setChunkTextList(chunkTextList);
 						vectorSearchResultsModel.setNumberOfChunks(row.get("numberOfChucks").getLongValue());
 						vectorSearchResultsModel.setContentType(row.get("contenttype").getStringValue());
 						long micros = row.get("created_at").getTimestampValue();

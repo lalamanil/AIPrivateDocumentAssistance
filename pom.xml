@@ -67,6 +67,11 @@
 
 		<dependency>
 			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-vertexai</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-document-ai</artifactId>
 		</dependency>
 		<dependency>
@@ -77,6 +82,11 @@
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-firestore</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-texttospeech</artifactId>	
 		</dependency>
 
 

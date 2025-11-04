@@ -1,5 +1,7 @@
 package com.document.personal.assistance.exception;
-
+/**
+@author ANIL LALAM
+**/
 public class TokenException extends RuntimeException {
 
 	private static final long serialVersionUID = 4492202988365234657L;

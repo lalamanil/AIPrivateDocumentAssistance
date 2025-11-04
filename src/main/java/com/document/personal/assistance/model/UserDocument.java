@@ -1,11 +1,13 @@
 package com.document.personal.assistance.model;
-
+/**
+@author ANIL LALAM
+**/
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-@JsonPropertyOrder({ "name", "fullName", "mimeType", "signedUrl" })
+@JsonPropertyOrder({ "name", "fullName", "mimeType", "signedUrl", "summaryText", "audiosignedUrl" })
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Schema(description = "Represents a user's uploaded document stored in GCS.")
 public class UserDocument {
@@ -15,7 +17,7 @@ public class UserDocument {
 	private String name;
 
 	@JsonProperty("fullName")
-	@Schema(description = "Full Name of the object stored in GCS bucket", example = "lalamanilbabu@")
+	@Schema(description = "Full Name of the object stored in GCS bucket", example = "lalamanilbabu@gmail.com/AI-PersonalDocument.pdf")
 	private String fullName;
 
 	@JsonProperty("mimeType")
@@ -25,15 +27,26 @@ public class UserDocument {
 	@Schema(description = "Signed URL to access the object securely via browser.")
 	private String signedUrl;
 
+	@JsonProperty("summaryText")
+	@Schema(description = "summary of document")
+	private String summaryText;
+
+	@JsonProperty("audiosignedUrl")
+	@Schema(description = "Signed URL to access the audio object securely via browser.")
+	private String audiosignedUrl;
+
 	public UserDocument() {
 
 	}
 
-	public UserDocument(String name, String fullName, String mimeType, String signedUrl) {
+	public UserDocument(String name, String fullName, String mimeType, String signedUrl, String summaryText,
+			String audiosignedUrl) {
 		this.name = name;
 		this.fullName = fullName;
 		this.mimeType = mimeType;
 		this.signedUrl = signedUrl;
+		this.summaryText = summaryText;
+		this.audiosignedUrl = audiosignedUrl;
 	}
 
 	public String getName() {
@@ -66,6 +79,22 @@ public class UserDocument {
 
 	public void setSignedUrl(String signedUrl) {
 		this.signedUrl = signedUrl;
+	}
+
+	public String getSummaryText() {
+		return summaryText;
+	}
+
+	public void setSummaryText(String summaryText) {
+		this.summaryText = summaryText;
+	}
+
+	public String getAudiosignedUrl() {
+		return audiosignedUrl;
+	}
+
+	public void setAudiosignedUrl(String audiosignedUrl) {
+		this.audiosignedUrl = audiosignedUrl;
 	}
 
 }

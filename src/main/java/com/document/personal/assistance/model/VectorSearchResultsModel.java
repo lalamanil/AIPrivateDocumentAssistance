@@ -1,7 +1,9 @@
 package com.document.personal.assistance.model;
-
+/**
+@author ANIL LALAM
+**/
 import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -9,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonPropertyOrder({ "documentId", "distanceList", "numberOfChunks", "signedUrl", "contentType", "createdAt" })
+@JsonPropertyOrder({ "documentId", "distanceList", "numberOfChunks", "signedUrl", "contentType", "relevanceScore",
+		"shortReason", "summaryText", "audiosignedUrl", "createdAt" })
 public class VectorSearchResultsModel {
 
 	@JsonProperty("documentId")
@@ -19,6 +22,10 @@ public class VectorSearchResultsModel {
 	@JsonProperty("distanceList")
 	@Schema(description = "List of cosine distances representing similarity between the user prompt and document chunks. Top 10 closest chunks are provided.", example = "[0.24372218986121652,0.2516626122117682,0.27268671278459344,0.27356756686235606,0.27485940529417463,0.27918230132758837,0.2805830352944597,0.2809073938732316,0.29620080760570033,0.298830454558216]")
 	private List<Double> distanceList;
+
+	@JsonIgnore
+	@Schema(hidden = true)
+	private List<String> chunkTextList;
 
 	@JsonProperty("numberOfChunks")
 	@Schema(description = "Number of document chunks returned that are closest to the given user prompt.", example = "10")
@@ -32,9 +39,65 @@ public class VectorSearchResultsModel {
 	@Schema(description = "Content Type of the document stores in GCS bucket.", example = "application/pdf")
 	private String contentType;
 
+	@JsonProperty("relevanceScore")
+	@Schema(description = "relevance score from Gemini-2.5-flash model", example = "1.0")
+	private float relevanceScore;
+
+	@JsonProperty("shortReason")
+	@Schema(description = "shot description for relevance score")
+	private String shortReason;
+
+	@JsonProperty("summaryText")
+	@Schema(description = "summarization of a document using Gemini-2.5-flash model")
+	private String summaryText;
+
+	@JsonProperty("audiosignedUrl")
+	@Schema(description = "Signed URL to access the audio object securely via browser.")
+	private String audiosignedUrl;
+
 	@JsonProperty("createdAt")
 	@Schema(description = "ISO-8601 formatted timestamp indicating when the search results were generated.", example = "2025-10-02T00:23:48.186776Z")
 	private String createdAt;
+
+	public String getSummaryText() {
+		return summaryText;
+	}
+
+	public void setSummaryText(String summaryText) {
+		this.summaryText = summaryText;
+	}
+
+	public String getAudiosignedUrl() {
+		return audiosignedUrl;
+	}
+
+	public void setAudiosignedUrl(String audiosignedUrl) {
+		this.audiosignedUrl = audiosignedUrl;
+	}
+
+	public List<String> getChunkTextList() {
+		return chunkTextList;
+	}
+
+	public void setChunkTextList(List<String> chunkTextList) {
+		this.chunkTextList = chunkTextList;
+	}
+
+	public float getRelevanceScore() {
+		return relevanceScore;
+	}
+
+	public void setRelevanceScore(float relevanceScore) {
+		this.relevanceScore = relevanceScore;
+	}
+
+	public String getShortReason() {
+		return shortReason;
+	}
+
+	public void setShortReason(String shortReason) {
+		this.shortReason = shortReason;
+	}
 
 	public String getContentType() {
 		return contentType;

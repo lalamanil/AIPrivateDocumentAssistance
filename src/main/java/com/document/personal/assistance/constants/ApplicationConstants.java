@@ -1,5 +1,7 @@
 package com.document.personal.assistance.constants;
-
+/**
+@author ANIL LALAM
+**/
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +14,8 @@ public interface ApplicationConstants {
 	public static final String PROCESSOR_ID = "501dfab435adaaeb";
 
 	public static final String LOCATION_ID = "us-central1";
+	public static final String modelname = "gemini-2.5-flash";
+	// public static final String modelname = "gemini-2.5-pro";
 
 	// Importing: For embeddings, you don't deploy your own endpoint. you call
 	// published model directly
@@ -28,6 +32,8 @@ public interface ApplicationConstants {
 
 	public static final String BUCKET = "documentassistance";
 
+	public static final String AUDIO_BUCKET = "documentassistanceaudio";
+
 	public static final int MAX_CHUNK_SIZE = 1024;
 
 	public static final int OVERLAPPING = 200;
@@ -35,6 +41,8 @@ public interface ApplicationConstants {
 	public static final String MIME_TYPE_PDF = "application/pdf";
 
 	public static final String FIRESTORE_COLLECTION = "event_log";
+
+	public static final String FIRESTORE_SUMMARY_COLLECTION = "document_summary";
 
 	public static final String FIRESTORE_DATABASE_ID = "privatedocumentsearch";
 
@@ -52,5 +60,11 @@ public interface ApplicationConstants {
 			"image/bmp", "image/gif", "image/tiff", "application/pdf");
 
 	public static final int NUMBER_OF_CHUNKS_PER_REQUEST = 50;
+
+	public static final float RELEVANCE_GENERATIVE_MODEL_CUTOFF = 0.85f;
+
+	public static final String TEXT_TO_SPEECH_LANGUAGE_CODE = "en-US";
+
+	public static final String AUDIO_CONTENT_TYPE = "audio/mpeg";
 
 }

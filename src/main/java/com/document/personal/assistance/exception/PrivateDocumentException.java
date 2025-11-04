@@ -1,5 +1,7 @@
 package com.document.personal.assistance.exception;
-
+/**
+@author ANIL LALAM
+**/
 public class PrivateDocumentException extends RuntimeException {
 
 	private static final long serialVersionUID = 3996654351417178201L;

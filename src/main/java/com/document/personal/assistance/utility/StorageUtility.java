@@ -1,5 +1,7 @@
 package com.document.personal.assistance.utility;
-
+/**
+@author ANIL LALAM
+**/
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -92,11 +94,8 @@ public class StorageUtility {
 	}
 
 	public static List<UserDocument> getDocumentsOnUserid(String userid) {
-
 		List<UserDocument> documentList = new ArrayList<UserDocument>();
-
 		if (NotNullEmptyUtility.notNullEmptyCheck(userid)) {
-
 			if (null != storage) {
 				try {
 					Bucket bucket = storage.get(ApplicationConstants.BUCKET);
@@ -110,7 +109,9 @@ public class StorageUtility {
 						if (!blob.isDirectory()) {
 							String name = blob.getName().substring(blob.getName().lastIndexOf("/") + 1);
 							documentList.add(new UserDocument(name, blob.getName(), blob.getContentType(),
-									generateSignedUrl(ApplicationConstants.BUCKET, blob.getName())));
+									generateSignedUrl(ApplicationConstants.BUCKET, blob.getName()),
+									FireStoreUtility.getSummaryForDocument(userid, name),
+									generateSignedUrl(ApplicationConstants.AUDIO_BUCKET, blob.getName())));
 						}
 					}
 					return documentList;

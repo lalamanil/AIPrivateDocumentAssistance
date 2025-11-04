@@ -1,5 +1,7 @@
 package com.document.personal.assistance.utility;
-
+/**
+@author ANIL LALAM
+**/
 public class NotNullEmptyUtility {
 
 	public static boolean notNullEmptyCheck(String input) {

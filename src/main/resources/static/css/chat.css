@@ -1,5 +1,12 @@
 @charset "UTF-8";
 
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden; /* Prevent body scrollbar if not needed */
+}
+
 .chat-container {
 	display: flex;
 	align-items: stretch;
@@ -41,7 +48,6 @@
 	display: flex;
 	align-items: center; /* Vertically align items in the middle */
 	gap: 8px; /* Add some space between the icon and the file name */
-
 	padding: 8px;
 	border-radius: 6px;
 	cursor: pointer;
@@ -51,9 +57,9 @@
 }
 
 .file-icon {
-    /* Optional: Ensure the icon text is aligned correctly and takes up minimal space */
-    line-height: 1; 
-    font-size: 18px; /* Adjust size if needed */
+	/* Optional: Ensure the icon text is aligned correctly and takes up minimal space */
+	line-height: 1;
+	font-size: 18px; /* Adjust size if needed */
 }
 
 .file-name {
@@ -79,12 +85,14 @@
 
 /* Chat section */
 .chat-box {
-	flex: 0.9;
+	flex: 1;
 	display: flex;
 	flex-direction: column;
 	background: #fff;
 	border-radius: 8px;
 	border: 1px solid #ddd;
+	min-width: 0;
+	overflow: hidden;
 }
 
 .chat-messages {
@@ -118,26 +126,29 @@
 	border-radius: 0 0 8px 0;
 }
 
-/* Preview area */
 .chat-doc-preview {
 	flex: 1.6;
 	background: #fff;
 	border-radius: 8px;
 	border: 1px solid #ddd;
+	position: relative;
+	/* CRITICAL: Force column layout */
 	display: flex;
-	justify-content: center;
-	align-items: center;
+	padding: 10px;
+	/* CRITICAL: Must inherit height from parent (which you already set to 100%) */
+	height: 100%;
 }
 
 .chat-doc-preview iframe {
 	width: 100%;
 	height: 100%;
 	border: none;
+	flex: 1;
 }
 
 .chat-doc-preview img {
-	max-width: 95%;
-	max-height: 95%;
+	width: 100%;
+	height: 100%;
 	object-fit: contain;
 	border-radius: 8px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -177,6 +188,7 @@
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+	width: 100%;
 	color: #777;
 	font-size: 16px;
 	font-family: Arial, sans-serif;
@@ -194,7 +206,6 @@
 	margin: 0;
 	font-style: italic;
 }
-
 
 /* Active State Styles (already using the ID, so they are highly specific) */
 .chat-documents-list #chat-doc-list li.active {
@@ -246,4 +257,111 @@
 #chatpageInfo {
 	font-size: 13px;
 	color: #555;
+}
+
+.toggle-wrapper {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 10;
+}
+
+.preview-toggle {
+	display: flex;
+	gap: 5px;
+}
+
+.preview-toggle button {
+	padding: 6px 15px;
+	border: 1px solid #aaa;
+	background: #f5f5f5;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: all 0.2s;
+}
+
+.preview-toggle button.active {
+	background: #007bff;
+	color: white;
+	border-color: #007bff;
+}
+
+#chat-doc-content {
+	position: absolute; /* KEY: Ignore normal flow */
+	top: 50px;
+	/* Starts below the toggle buttons (10px padding + button height ~40px) */
+	left: 10px; /* Matches parent padding */
+	right: 10px; /* Matches parent padding */
+	bottom: 10px; /* Matches parent padding */
+	/* Revert to flex to control its own content stretch (img/iframe) */
+	display: flex;
+	flex-direction: column;
+}
+
+#chat-doc-content iframe, #chat-doc-content img {
+	/* These properties are now stretching inside the absolutely-positioned #chat-doc-content */
+	width: 100%;
+	height: 100%;
+	flex: 1;
+	border: none;
+	object-fit: contain;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.summary-text {
+	padding: 15px;
+	background: #f8f9fa;
+	border-radius: 8px;
+	white-space: pre-wrap;
+	/* NEW: summary text must now fill the absolutely positioned content area */
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+audio {
+	width: 100%;
+	margin-top: 10px;
+}
+
+.processing-dots {
+    display: inline-flex; /* Align dots horizontally */
+    align-items: center;
+    margin-left: 5px;
+    height: 1.4em; /* Match line height */
+}
+
+.processing-dots span {
+    display: block;
+    width: 6px;
+    height: 6px;
+    margin: 0 2px;
+    background-color: #4a90e2; /* Use your primary blue color */
+    border-radius: 50%;
+    opacity: 0.8;
+    
+    /* Animation setup */
+    animation: vibrate-dots 1.4s infinite ease-in-out;
+}
+.processing-dots span:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.processing-dots span:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.processing-dots span:nth-child(3) {
+    animation-delay: 0.5s;
+}
+
+/* The Keyframe Animation */
+@keyframes vibrate-dots {
+    0%, 80%, 100% {
+        transform: scale(0);
+    }
+    40% {
+        transform: scale(1.0);
+    }
 }

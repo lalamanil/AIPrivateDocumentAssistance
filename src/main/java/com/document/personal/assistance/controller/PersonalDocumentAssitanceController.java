@@ -1,5 +1,7 @@
 package com.document.personal.assistance.controller;
-
+/**
+@author ANIL LALAM
+**/
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -101,7 +103,7 @@ public class PersonalDocumentAssitanceController {
 	@Operation(summary = "Fetch contextually relevant documents for a user query", description = "This endpoint accepts a user ID and a natural language prompt. The prompt is converted into embeddings (vectors) using the text-multimodal-embedding model with the 'Retrieval_Query' task type. A semantic search is then performed on the user's stored documents to return the most contextually relevant results.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Request succeeded. The response may contain relevant documents or an empty list if none were found.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserPromptResponseModel.class), examples = {
-					@ExampleObject(value = "{\"documents\":[{\"documentId\":\"lalamanilbabu@gmail.com/594811_825090_i129.pdf\",\"distanceList\":[0.28246063382085773,0.29050991429092743,0.3005167822457774,0.30467832844497045,0.30568839519261604,0.3151346181627902,0.3153263105505212],\"numberOfChunks\":7,\"signedUrl\":\"***\",\"createdAt\":\"2025-10-02T16:09:13.012\"},{\"documentId\":\"lalamanilbabu@gmail.com/Nonimmigrant Visa - Confirmation Page.pdf\",\"distanceList\":[0.28986213508190495,0.3040744457986747],\"numberOfChunks\":2,\"signedUrl\":\"****\"}],\"message\":\"Relevant Documents Found\",\"statusCode\":200}", name = "Relevant Documents Found"),
+					@ExampleObject(value = "{\"documents\":[{\"documentId\":\"lalamanilbabu@gmail.com/594811_CMM.pdf\",\"distanceList\":[0.2856592128922749,0.2858003739131092],\"numberOfChunks\":7,\"signedUrl\":“****”,\"contentType\":\"application/pdf\",\"relevanceScore\": 1,\"shortReason\":“short description“,\"audiosignedUrl\": “*****”,\"createdAt\":\"2025-10-20T21:09:57.629\" } ],\"message\":\"Relevant Documents Found\",\"statusCode\": 200}", name = "Relevant Documents Found"),
 					@ExampleObject(name = "No Relevant Documents Found", value = "{\"documents\":[],\"message\":\"No relevant documents found for the given prompt\",\"statusCode\":200}") })),
 			@ApiResponse(responseCode = "400", description = "Bad Request - Missing headers,Invalid inputs or validation failed", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PrivateDocumentErrorModel.class), examples = @ExampleObject(value = "{\"statusCode\": 400,\"message\": \"userid cannot be null or empty. Please provide valid userid\",\"path\": \"/getDocsforuserprompt\", \"timeStamp\": \"2025-10-02T01:23:55.801846Z\"}"))),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected issue occurred", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PrivateDocumentErrorModel.class), examples = @ExampleObject(value = "{ \"status\": 500, \"error\": \"Internal Server Error\", \"message\": \"Unexpected processing error\", \"path\": \"/event\", \"timestamp\": \"2025-10-01T12:30:45Z\" }"))) })
@@ -126,7 +128,7 @@ public class PersonalDocumentAssitanceController {
 	@ResponseBody
 	@Operation(summary = "Retrieve documents uploaded by a user", description = "This endpoint returns the list of documents uploaded by the specified user to the GCS bucket.")
 	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Successfully retrieved the list of documents", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDocument.class), examples = @ExampleObject(value = "{\"name\":\"594811_Anil Lalam_GCP_Lead_developer_Updated.pdf\",\"fullName\":\"lalamanilbabu@gmail.com/594811_Anil Lalam_GCP_Lead_developer_Updated.pdf\",\"mimeType\":\"application/pdf\",\"signedUrl\":\"**********\"}"))),
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved the list of documents", content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDocument.class), examples = @ExampleObject(value = "[{\"name\":\"594811_Btech_OD.pdf\",\"fullName\":\"lalamanilbabu@gmail.com/594811_Btech_OD.pdf\",\"mimeType\": \"application/pdf\",\"signedUrl\":\"https://storage.googleapis.com/documentassistance/lalamanilbabu%40gmail.com/594811_Btech_OD.pdf?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=ai-projects-service-account%40videoanalyzer-455321.iam.gserviceaccount.com%2F20251031%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20251031T032352Z&X-Goog-Expires=3600&X-Goog-SignedHeaders=host&X-Goog-Signature=...\",\"summaryText\": “Summary text,\"audiosignedUrl\": “***”}]"))),
 			@ApiResponse(responseCode = "400", description = "Bad Request - Missing or invalid user ID", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PrivateDocumentErrorModel.class), examples = @ExampleObject(value = "{\"statusCode\": 400, \"message\": \"userid is required. Can not be null or empty\", \"path\": \"/listUserDocs\", \"timeStamp\": \"2025-10-02T19:03:59.081638Z\"}"))),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error - Unexpected issue occurred", content = @Content(mediaType = "application/json", schema = @Schema(implementation = PrivateDocumentErrorModel.class), examples = @ExampleObject(value = "{ \"status\": 500, \"error\": \"Internal Server Error\", \"message\": \"Unexpected processing error\", \"path\": \"/event\", \"timestamp\": \"2025-10-01T12:30:45Z\" }")))
 
@@ -202,7 +204,6 @@ public class PersonalDocumentAssitanceController {
 		return ResponseEntity.status(statusCode).body(responseBody);
 	}
 
-	@Hidden
 	@RequestMapping(value = "/uploadPage", method = RequestMethod.GET, produces = MediaType.TEXT_HTML_VALUE)
 	public String uploadFile() {
 

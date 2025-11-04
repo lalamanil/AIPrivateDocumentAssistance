@@ -1,5 +1,7 @@
 package com.document.personal.assistance.model;
-
+/**
+@author ANIL LALAM
+**/
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
