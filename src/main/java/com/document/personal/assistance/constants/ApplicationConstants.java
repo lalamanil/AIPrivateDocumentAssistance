@@ -1,4 +1,5 @@
 package com.document.personal.assistance.constants;
+
 /**
 @author ANIL LALAM
 **/
@@ -14,12 +15,13 @@ public interface ApplicationConstants {
 	public static final String PROCESSOR_ID = "501dfab435adaaeb";
 
 	public static final String LOCATION_ID = "us-central1";
-	public static final String modelname = "gemini-2.5-flash";
-	// public static final String modelname = "gemini-2.5-pro";
 
-	// Importing: For embeddings, you don't deploy your own endpoint. you call
-	// published model directly
-	// public static final String TEXT_EMBEDDING_MODEL = "text-embedding-004";
+	public static final String Global = "global";
+
+	public static final String modelname = "gemini-2.5-flash";
+
+	public static final String liteModelname = "gemini-3.5-flash-lite";
+
 	public static final String TEXT_EMBEDDING_MODEL = "text-multilingual-embedding-002";
 
 	public static final String TASK_TYPE_RETRIEVAL_DOCUMENT = "RETRIEVAL_DOCUMENT";

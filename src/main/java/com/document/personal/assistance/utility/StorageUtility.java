@@ -147,7 +147,7 @@ public class StorageUtility {
 		}
 
 		BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, objectName).build();
-		URL url = storage.signUrl(blobInfo, 1, TimeUnit.HOURS, Storage.SignUrlOption.withV4Signature());
+		URL url = storage.signUrl(blobInfo, 1, TimeUnit.DAYS, Storage.SignUrlOption.withV4Signature());
 		String signedUrl = url.toString();
 		LOGGER.info("signedUrl for bucketName:" + bucketName + " objectName:" + objectName + " is:" + signedUrl);
 		return signedUrl;

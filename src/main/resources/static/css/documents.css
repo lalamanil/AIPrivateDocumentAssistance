@@ -93,34 +93,36 @@ html, body, #content-area, .main-content {
 	color: #4a90e2;
 }
 
+
 .file-name {
-	flex: 1;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	color: #333;
-	font-size: 14px;
+  max-width: 200px;       /* Adjust width as needed */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  cursor: default;
 }
 
-/* Tooltip on hover for long filenames */
-.file-name[title] {
-	position: relative;
+.file-name:hover::after {
+  content: attr(title);
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  top: 120%;
+  left: 0;
+  white-space: nowrap;
+  z-index: 10;
+  opacity: 1;                /* 👈 visible immediately */
+  transform: translateY(0);  /* 👈 no animation delay */
+  pointer-events: none;
+  transition: none;          /* 👈 disable fade-in animation */
 }
 
-.file-name[title]:hover::after {
-	content: attr(title);
-	position: absolute;
-	background: #333;
-	color: #fff;
-	padding: 5px 8px;
-	border-radius: 4px;
-	font-size: 12px;
-	top: 120%;
-	left: 0;
-	white-space: nowrap;
-	z-index: 10;
-	opacity: 0.9;
-}
 
 /* RIGHT PANEL */
 .document-viewer {
@@ -325,5 +327,30 @@ html, body, #content-area, .main-content {
 
 #summary-audio audio {
   width: 100%;
+}
+
+.error-message {
+  text-align: center;
+  color: #d9534f;
+  background: #fff8f8;
+  border: 1px solid #f5c2c2;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 20px;
+}
+
+.error-message button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.error-message button:hover {
+  background: #0056b3;
 }
 

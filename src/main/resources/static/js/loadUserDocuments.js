@@ -11,15 +11,15 @@ function loadUserDocument() {
 	const prevBtn = document.getElementById("prevPage");
 	const nextBtn = document.getElementById("nextPage");
 	const pageInfo = document.getElementById("pageInfo");
-	
-	
-  const summaryContainer = document.getElementById("summary-view");
-  const summaryContent = document.getElementById("summary-content");
-  const summaryAudio = document.getElementById("summary-audio");
-  
-  const toggleContainer = document.getElementById("toggle-container");
-  const previewToggle = document.getElementById("previewToggle");
-  const summaryToggle = document.getElementById("summaryToggle");
+
+
+	const summaryContainer = document.getElementById("summary-view");
+	const summaryContent = document.getElementById("summary-content");
+	const summaryAudio = document.getElementById("summary-audio");
+
+	const toggleContainer = document.getElementById("toggle-container");
+	const previewToggle = document.getElementById("previewToggle");
+	const summaryToggle = document.getElementById("summaryToggle");
 
 	const pageSize = 10;
 	let currentPage = 1;
@@ -41,6 +41,7 @@ function loadUserDocument() {
 			const name = document.createElement("span");
 			name.textContent = doc.name;
 			name.classList.add("file-name");
+			name.title = doc.name;
 			li.append(icon, name);
 			li.addEventListener("click", () => {
 				document.querySelectorAll("#doc-items li").forEach(item => item.classList.remove("active"));
@@ -48,74 +49,87 @@ function loadUserDocument() {
 				placeholder.style.display = "none";
 				previewContainer.innerHTML = ""; //clear old prview
 				previewContainer.style.display = "block";
-				
-				toggleContainer.style.display="flex";
+
+				toggleContainer.style.display = "flex";
 				previewToggle.classList.add("active");
 				summaryToggle.classList.remove("active");
 				previewContainer.style.display = "block";
-                summaryContainer.style.display = "none";
-					
+				summaryContainer.style.display = "none";
+
 				//logic to render preview
 				const renderPreview = () => {
 					previewContainer.innerHTML = "";
 					if (doc.mimeType.startsWith("image/")) {
-					const img = document.createElement("img");
-					img.src = doc.signedUrl;
-					previewContainer.appendChild(img);
-				} else {
-					if (doc.mimeType === "application/pdf") {
-						const useGoogleViewer = false; //toggel here if needed
-						const iframe = document.createElement("iframe");
-						iframe.src = useGoogleViewer ? `https://docs.google.com/gview?url=${encodeURIComponent(doc.signedUrl)}&embedded=true` : doc.signedUrl;
-						
-						  // ensure iframe fills the viewer area
-                          iframe.style.width = "100%";
-                          iframe.style.height = "100%";
-						previewContainer.appendChild(iframe);
+						const img = document.createElement("img");
+						img.src = doc.signedUrl;
+
+						//handle expired signed URL
+						img.onerror = () => {
+							previewContainer.innerHTML = `<div class="error-message">⚠️ Document session expired. <br> <button id="refreshDoc">Refresh</button></div>`;
+							document.getElementById("refreshDoc").onclick = () => location.reload();
+						};
+						previewContainer.appendChild(img);
 					} else {
-						previewContainer.innerHTML = `<p>Preview not supported for this file type: ${doc.mimeType}</p>`;
+						if (doc.mimeType === "application/pdf") {
+							checkSignedUrl(doc.signedUrl).then(isValid => {
+								if (!isValid) {
+									previewContainer.innerHTML = `<div class="error-message">⚠️ Document session expired. <br> <button id="refreshDoc">Refresh</button></div>`;
+									document.getElementById("refreshDoc").onclick = () => location.reload();
+									return;
+								}
+							});
+							const useGoogleViewer = false; //toggel here if needed
+							const iframe = document.createElement("iframe");
+							iframe.src = useGoogleViewer ? `https://docs.google.com/gview?url=${encodeURIComponent(doc.signedUrl)}&embedded=true` : doc.signedUrl;
+
+							// ensure iframe fills the viewer area
+							iframe.style.width = "100%";
+							iframe.style.height = "100%";
+							previewContainer.appendChild(iframe);
+						} else {
+							previewContainer.innerHTML = `<p>Preview not supported for this file type: ${doc.mimeType}</p>`;
+						}
 					}
-				}		
 				};
-				
-				
-	const renderSummary = () => {
-          summaryContainer.style.display = "flex";
-          previewContainer.style.display = "none";
 
-      if(doc.summaryText ){
-	    summaryContent.innerHTML =doc.summaryText ;
-      }else{
-	   summaryContent.textContent="No summary available.";
-      }
-          summaryAudio.innerHTML = "";
 
-          if (doc.audiosignedUrl) {
-            const audio = document.createElement("audio");
-            audio.controls = true;
-            audio.src = doc.audiosignedUrl;
-            summaryAudio.appendChild(audio);
-          } else {
-            summaryAudio.innerHTML = `<p style="color:gray;">Audio not available</p>`;
-          }
-        };
+				const renderSummary = () => {
+					summaryContainer.style.display = "flex";
+					previewContainer.style.display = "none";
+
+					if (doc.summaryText) {
+						summaryContent.innerHTML = doc.summaryText;
+					} else {
+						summaryContent.textContent = "No summary available.";
+					}
+					summaryAudio.innerHTML = "";
+
+					if (doc.audiosignedUrl) {
+						const audio = document.createElement("audio");
+						audio.controls = true;
+						audio.src = doc.audiosignedUrl;
+						summaryAudio.appendChild(audio);
+					} else {
+						summaryAudio.innerHTML = `<p style="color:gray;">Audio not available</p>`;
+					}
+				};
 				//default: show preview
 				renderPreview();
-				
-	  previewToggle.onclick = () => {
-          previewToggle.classList.add("active");
-          summaryToggle.classList.remove("active");
-          summaryContainer.style.display = "none";
-          previewContainer.style.display = "block";
-          renderPreview();
-        };
 
-      summaryToggle.onclick = () => {
-          summaryToggle.classList.add("active");
-          previewToggle.classList.remove("active");
-          renderSummary();
-        };
-				
+				previewToggle.onclick = () => {
+					previewToggle.classList.add("active");
+					summaryToggle.classList.remove("active");
+					summaryContainer.style.display = "none";
+					previewContainer.style.display = "block";
+					renderPreview();
+				};
+
+				summaryToggle.onclick = () => {
+					summaryToggle.classList.add("active");
+					previewToggle.classList.remove("active");
+					renderSummary();
+				};
+
 			});
 			listContainer.appendChild(li);
 		});
@@ -124,6 +138,17 @@ function loadUserDocument() {
 		pageInfo.textContent = `Page ${currentPage} of ${Math.ceil(documents.length / pageSize)}`;
 		prevBtn.disabled = currentPage === 1;
 		nextBtn.disabled = end >= documents.length;
+	}
+
+
+
+	function checkSignedUrl(url) {
+		return fetch(url, { method: "GET",
+		                    headers: { "Range": "bytes=0-1" } 
+		                    }).then(res => {
+				if (res.ok) return true;
+				return false; //expired or forbidden
+			}).catch(() => false);
 	}
 
 	//Event Listener for pagination buttons
@@ -157,7 +182,7 @@ function loadUserDocument() {
 			spinner.style.display = "none"; //hide spinner
 			listContainer.style.display = "block"; //show list
 			documents = docs;
-			if (documents.lenght == 0) {
+			if (documents.length == 0) {
 				listContainer.innerHTML = "<li>No documents found.</li>";
 				return;
 			}

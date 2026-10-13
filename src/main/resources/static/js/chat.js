@@ -124,6 +124,7 @@ function initChat() {
 			const name = document.createElement("span");
 			name.textContent = doc.documentId.split("/")[1];
 			name.classList.add("file-name");
+			name.title = doc.documentId.split("/")[1];
 			li.append(icon, name);
 			li.addEventListener("click", () => {
 				document.querySelectorAll("#chat-doc-list li").forEach(item => item.classList.remove("active"));

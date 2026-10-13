@@ -21,6 +21,7 @@ import com.document.personal.assistance.service.EmbeddingService;
 import com.document.personal.assistance.utility.BigQueryUtility;
 import com.document.personal.assistance.utility.DocumentOCROnlineInferenceUtility;
 import com.document.personal.assistance.utility.FireStoreUtility;
+import com.document.personal.assistance.utility.GenAIVertexAIUtility;
 import com.document.personal.assistance.utility.GeneralUtility;
 import com.document.personal.assistance.utility.NotNullEmptyUtility;
 import com.document.personal.assistance.utility.ObjectMapperSingleton;
@@ -93,9 +94,9 @@ public class EmbeddingServiceImpl implements EmbeddingService {
 									BigQueryUtility.insertRowsBatch(rowList, ApplicationConstants.TABLE_NAME);
 								}
 
-								// Summarizing the raw text using gemini-2.5-flash
+								// Summarizing the raw text using gemini-3.5-flash-lite
 								String summaryPrompt = "Summarize this text: " + text;
-								String summaryText = VertexAIGeminiAPI.reRankSummarizeDocuments(summaryPrompt);
+								String summaryText = GenAIVertexAIUtility.reRankSummarizeDocuments(summaryPrompt);
 								if (NotNullEmptyUtility.notNullEmptyCheck(summaryText)) {
 									String htmlsupportedSummaryText = GeneralUtility
 											.convertBoldToHtmlOrPlainText(summaryText, true);
@@ -183,7 +184,7 @@ public class EmbeddingServiceImpl implements EmbeddingService {
 			List<VectorSearchResultsModel> listFromGenerativeModel = null;
 
 			if (NotNullEmptyUtility.notNullEmptyCheck(geminiPromptForReranking)) {
-				String responseFromGenerativeModel = VertexAIGeminiAPI
+				String responseFromGenerativeModel = GenAIVertexAIUtility
 						.reRankSummarizeDocuments(geminiPromptForReranking);
 				// LOGGER.info("responseFromGenerativeModel:" + responseFromGenerativeModel);
 				listFromGenerativeModel = mapResponseFromGenerativeModeltoExistingVectorSearch(

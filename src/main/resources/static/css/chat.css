@@ -62,15 +62,6 @@ html, body {
 	font-size: 18px; /* Adjust size if needed */
 }
 
-.file-name {
-	flex: 1;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	color: #333;
-	font-size: 14px;
-}
-
 #chat-doc-list li:hover {
 	background: #eef5ff;
 }
